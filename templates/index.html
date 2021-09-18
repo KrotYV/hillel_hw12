@@ -7,13 +7,22 @@
 <body>
 
 
-    <form method="POST">
+    <form action="" method="post">
         {% csrf_token %}
+        <p>
+            <label for="email">Email: </label>
+            <input type="email" id="email" name="email"/>
+        </p>
+        <p>
+            <label for="message">Message: </label>
+            <input type="text" id="message" name="message"/>
+        </p>
+        <p>
+            <label for="time">Date: </label>
+            <input type="datetime-local" id="time" name="time"/>
+        </p>
+        <input type="submit" value="Submit"/>
 
-
-            {{ form.as_p }}
-
-    <input type="submit" value="Send" >
     </form>
 
 </body>
