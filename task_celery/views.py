@@ -1,21 +1,23 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
 
-from task_celery.tasks import send_mail as celery_send_mail
+from task_celery.tasks import celery_send_mail
 
 from .forms import Reminder
 
 
-def index(request):
+def reminder(request):
     if request.method == "POST":
         form = Reminder(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
             message = form.cleaned_data['message']
-            date = form.cleaned_data['time']
-            celery_send_mail.apply_async([email, message], eta=date)
-            messages.add_message(request, messages.SUCCESS, 'Message sent')
+            receiver = form.cleaned_data['email']
+            time = form.cleaned_data['time']
+            celery_send_mail.apply_async((message, receiver), eta=time)
+            messages.success(request, 'Remind is created')
             return redirect('')
+        else:
+            messages.error(request, 'Reminder not created!')
     else:
         form = Reminder()
 
